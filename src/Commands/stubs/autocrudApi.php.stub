@@ -1,0 +1,16 @@
+<?php
+
+namespace DummyNamespace;
+
+use WKasunSampath\LaravelAutocrud\BaseCrud;
+
+class {{crud_class}} extends BaseCrud
+{
+    /**
+     * Set whether CRUD operations are related to API or not.
+     */
+    protected bool $isApi = true;
+
+    /**
+     * Model instance which CRUD operations relate.
+     */

@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use WKasunSampath\LaravelAutocrud\AutocrudRouter;
+
+class {{crud_router_class}} extends AutocrudRouter
+{
+    /**
+     * Register all autocrud classes here.
+     */
+    protected array $autocruds = [];
+}
