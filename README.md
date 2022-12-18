@@ -66,7 +66,7 @@ Autocrud classes are the files generated when runs `php artisan autocrud:create 
 
 Autocruds classes extend the BaseCrud class. Most important setting of this class is `protected string $model`. You can bind the model which you need to create CRUD here. It is recommanded to use the model name as the Autocrud class name.
 
-```
+```php
 <?php
 
 namespace App\Http\Autocruds;
