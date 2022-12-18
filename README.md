@@ -177,9 +177,13 @@ As you may have noticed, creating five different files for CRUD in views folder 
 There are several useful methods related to index route which you can override inside the autocrud class.
 
 `public function indexMiddlewares(): array`: You can add index route specific middlewares here.
+
 `public function afterIndexPage(): string`: View to redirect after index operation in web apps, (Not available in APIs.) 
+
 `public function makeIndexRoute(): bool`: If this is set to false, index route will not be available for that particular model.
+
 `public function indexMethod(): string`: Method for that specific index route. Default is "GET".
+
 `public function indexEagerLoad(): array`: If you need to eager load any relationship data with index, add those relationships here.
 ```php
 /**
@@ -191,6 +195,7 @@ public function indexEagerLoad(): array
 }
 ```
 `public function beforeIndex(Builder $query): Builder`: If you need to modify inde query, you may do it here. (Don't include `->get()`)
+
 `public function afterIndex(Collection $data): mixed`: Modify fetched index data before send back to the user.
 ## Changelog
 
