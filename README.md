@@ -173,7 +173,7 @@ It is recommended to follow below convention when using autocrud library.
                 ├── update.blade.php
                 └── delete.blade.php
 ```
-As you may have noticed, creating five different files for CRUD in views folder is little bit abnormal and most of the time it is not neccessary. (This will applicable only in web apps.) When you are creating autocrud classes for a web app, there will be functions to override this behaviour.
+As you may have noticed, creating five different files for CRUD in views folder is little bit abnormal and most of the time it is not necessary. (This will applicable only in web apps.) When you are creating autocrud classes for a web app, there will be functions to override this behaviour.
 
 ## Index Route
 There are several useful methods related to index route which you can override inside the autocrud class.
@@ -196,7 +196,7 @@ public function indexEagerLoad(): array
     return ['locations'];
 }
 ```
-`public function beforeIndex(Builder $query): Builder`: If you need to modify inde query, you may do it here. (Don't include `->get()`)
+`public function beforeIndex(Builder $query): Builder`: If you need to modify index query, you may do it here. (Don't include `->get()`)
 
 `public function afterIndex(Collection $data): mixed`: Modify fetched index data before send back to the user.
 
@@ -213,7 +213,7 @@ There are several useful methods related to view route which you can override in
 
 `public function viewEagerLoad(): array`: If you need to eager load any relationship data with view, add those relationships here.
 
-`public function beforeView(Builder $query): Builder`: If you need to modify inde query, you may do it here. (Don’t include ->get())
+`public function beforeView(Builder $query): Builder`: If you need to modify view query, you may do it here. (Don’t include ->get())
 
 `public function afterView(Model $model): mixed`: Modify fetched view data before send back to the user.
 
@@ -228,7 +228,7 @@ There are several useful methods related to create route which you can override 
 
 `public function createMethod(): string`: Method for that specific create route. Default is “POST”.
 
-`public function createRequest(): string|null`: Here you can set the name of form request class. Normally, autocrud will get the form request class automatically when you are following the convention in [forlder structure](#folder-structure) section. Oherwise you can specifically give that class here.
+`public function createRequest(): string|null`: Here you can set the name of form request class. Normally, autocrud will get the form request class automatically when you are following the convention in [folder structure](#folder-structure) section. Otherwise you can specifically give that class here.
 
 You can skip form request validation by returning null.
 ```php
@@ -263,6 +263,40 @@ public function beforeCreate(array $data): array
 ```
 
 `public function afterCreate(Model $model): mixed`: Modify created data before send back to the user.
+
+## Update Route
+There are several useful methods related to update route which you can override inside the autocrud class.
+
+`public function updateMiddlewares(): array`: You can add update route specific middlewares here.
+
+`public function afterUpdatePage(): string`: View to redirect after update operation in web apps, (Not available in APIs.)
+
+`public function makeUpdateRoute(): bool`: If this is set to false, update route will not be available for that particular model.
+
+`public function updateMethod(): string`: Method for that specific update route. Default is “PUT”.
+
+`public function updateRequest(): string|null`: Here you can set the name of form request class. Normally, autocrud will get the form request class automatically when you are following the convention in [folder structure](#folder-structure) section. Otherwise you can specifically give that class here.
+
+You can skip form request validation by returning null.
+
+`public function beforeUpdate(array $data): array`: You can change data before save in the DB here.
+
+`public function afterUpdate(Model $model): mixed`: Modify created data before send back to the user.
+
+## Delete Route
+There are several useful methods related to delete route which you can override inside the autocrud class.
+
+`public function deleteMiddlewares(): array`: You can add delete route specific middlewares here.
+
+`public function afterDeletePage(): string`: View to redirect after delete operation in web apps, (Not available in APIs.)
+
+`public function makeDeleteRoute(): bool`: If this is set to false, delete route will not be available for that particular model.
+
+`public function deleteMethod(): string`: Method for that specific create route. Default is “DELETE”.
+
+`public function beforeDelete(Model $model): void`: Do stuff before delete the model.
+
+`public function afterDelete(): mixed`: Do stuff before sending response to user.
 
 ## Changelog
 
