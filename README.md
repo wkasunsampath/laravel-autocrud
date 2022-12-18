@@ -8,7 +8,7 @@ To create a fully working CRUD for User model, just run below command,
 php artisan autocrud:create User
 ```
 
-All you have to do is that. :) Now your Laravel app have below routes registered. To see routes, run `php artisan route:list`.
+All you have to do is that. :) Now your Laravel app have below routes regitsred. To see routes, run `php artisan route:list`.
 
 | Method | Route       | Route Name   | Operation |
 | ------ | ----------- | ------------ | --------- |
@@ -38,13 +38,15 @@ All done. Now you can see there is a `autocrud.php` file in config folder. Also,
 
 ## Usage
 
-Let's assume that there is a model called `Company` at `\App\Models\Company.php`. To create a fully working CRUD for that model, just run,
+Let's assume that there is a model called `Office` at `\App\Models\Company\Office.php`. To create a fully working CRUD for that model, just run,
 
 ```bash
-php artisan autocrud:create Company
+php artisan autocrud:create Company/Office
 ```
 
 All done. Your CRUD is working now. Not sure? Ok!, just run `php artisan route:list`.
+
+> **_NOTE:_** It is recommanded to maintain the same structure inside Autocruds folder as inside models folder.
 
 Let's go deeper.
 
@@ -53,12 +55,12 @@ Let's go deeper.
 -   [Autocrud Classes](#autocrud-classes)
 -   [Configuration](#configuration)
 -   [Folder Structure](#folder-structure)
--   [Index Route](#translations)
--   [View Route](#slugs)
--   [Create Route](#usage)
--   [Update Route](#functions)
--   [Delete Route](#exceptions)
--   [Best Practices](#laravel-compatibility)
+-   [Index Route](#index-route)
+-   [View Route](#view-route)
+-   [Create Route](#create-route)
+-   [Update Route](#update-route)
+-   [Delete Route](#delete-route)
+-   [Best Practices](#best-practices)
 
 ## Autocrud Classes
 
@@ -123,7 +125,7 @@ class Autocruds extends AutocrudRouter
 
 ## Configuration
 
-Autocrud config file contains some useful configuration options for your app. Normally, this file is getting published when you run `php artisan autocrud:install` command.
+Autocrud config file contains some usefull configuration options for your app. Normally, this file is getting published when you run `php artisan autocrud:install` command.
 
 | Config Option      | Description                                                                                                                                    |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -132,7 +134,7 @@ Autocrud config file contains some useful configuration options for your app. No
 | autocrud_setup     | You can set availability and method for each CRUD route here. This global setting can override individually in Autocrud classes for each CRUD. |
 | model_namespace    | Models location                                                                                                                                |
 | resource_namespace | Resources location                                                                                                                             |
-| request_namespace  | Request location                                                                                                                               |
+| request_namespace  | Requests location                                                                                                                              |
 
 ## Folder Structure
 
@@ -179,7 +181,30 @@ It is recommended to follow below convention when using autocrud library.
                 └── delete.blade.php
 ```
 
-As you may have noticed, creating five different files for CRUD in views folder is little bit abnormal and most of the time it is not necessary. (This will applicable only in web apps.) When you are creating autocrud classes for a web app, there will be functions to override this behaviour.
+As you may have noticed, creating five different files for CRUD in views folder is little bit abnormal and most of the time it is not neccessary. (This will applicable only in web apps.) When you are creating autocrud classes for a web app, there will be functions to override this behaviour.
+
+## Index Route
+
+There are several useful methods related to index route which you can override inside the autocrud class.
+
+`public function indexMiddlewares(): array`: You can add index route specific middlewares here.
+`public function afterIndexPage(): string`: View to redirect after index operation in web apps, (Not available in APIs.)
+`public function makeIndexRoute(): bool`: If this is set to false, index route will not be available for that particular model.
+`public function indexMethod(): string`: Method for that specific index route. Default is "GET".
+`public function indexEagerLoad(): array`: If you need to eager load any relationship data with index, add those relationships here.
+
+```php
+/**
+ * Eager load relationships with index query
+ */
+public function indexEagerLoad(): array
+{
+    return ['locations'];
+}
+```
+
+`public function beforeIndex(Builder $query): Builder`: If you need to modify inde query, you may do it here. (Don't include `->get()`)
+`public function afterIndex(Collection $data): mixed`: Modify fetched index data before send back to the user.
 
 ## Changelog
 
