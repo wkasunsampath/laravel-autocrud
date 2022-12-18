@@ -46,13 +46,60 @@ php artisan autocrud:create Company
 
 All done. Your CRUD is working now. Not sure? Ok!, just run `php artisan route:list`.
 
+Let's go deeper.
+
+### Docs
+
+-   [Autocrud Classes](#autocrud-classes)
+-   [Configuration](#configuration)
+-   [Folder Structure](#generators)
+-   [Index Route](#translations)
+-   [View Route](#slugs)
+-   [Create Route](#usage)
+-   [Update Route](#functions)
+-   [Delete Route](#exceptions)
+-   [Best Practices](#laravel-compatibility)
+
+## Autocrud Classes
+
+Autocrud classes are the files generated when runs `php artisan autocrud:create {class_name}`. Normally, these files are generated in `\App\Http\Autocruds` folder.
+
+Autocruds classes extend the BaseCrud class. Most important setting of this class is `protected string $model`. You can bind the model which you need to create CRUD here. It is recommanded to use the model name as the Autocrud class name.
+
+```
+<?php
+
+namespace App\Http\Autocruds;
+
+use WKasunSampath\LaravelAutocrud\BaseCrud;
+
+class User extends BaseCrud
+{
+    /**
+     * Set whether CRUD operations are related to API or not.
+     */
+    protected bool $isApi = true;
+
+    /**
+     * Model instance which CRUD operations relate.
+     */
+    protected string $model = \App\Models\User::class;
+
+    /**
+     * Middlewares which are applied to all routes
+     *
+     * Ex: ['auth:sanctum']
+     */
+    public function commonMiddlewares(): array
+    {
+        return [];
+    }
+}
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## License
 
