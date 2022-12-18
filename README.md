@@ -300,7 +300,7 @@ There are several useful methods related to delete route which you can override 
 1. Follow the [forlder structure](#folder-structure) as much as possible. So, you have not to override any function.
 2. It is not needed to create Form Request classes, Response classes and Policies for each. Autocrud will use them if they are available. Otherwise it will proceed according to normal Laravel way. But, it is recommanded to user Requests, Responses and Policies as much as possible to avoid security risks.
 3. To auto discover the Requests, Responses and Policies by the Autocrud, they should have followed the [forlder structure](#folder-structure) conventions.
-4. This package is not a total replacement for routes. Still you will have to use typical laravel routes and controllers when you are performing some complex actions. This package is just a helper package to speed up your development by automatng normal CRUD operations. 
+4. This package is not a total replacement for routes. Still you will have to use typical Laravel routes and controllers when you are performing some complex actions. This package is just a helper package to speed up your development by automating normal CRUD operations. 
 
 ## Changelog
 
