@@ -43,7 +43,9 @@ php artisan autocrud:create Company/Office
 ```
 All done. Your CRUD is working now. Not sure? Ok!, just run `php artisan route:list`.
 
+
 > **_NOTE:_** It is recommanded to maintain the same structure inside Autocruds folder as inside models folder.
+
 
 Let's go deeper.
 
@@ -197,6 +199,71 @@ public function indexEagerLoad(): array
 `public function beforeIndex(Builder $query): Builder`: If you need to modify inde query, you may do it here. (Don't include `->get()`)
 
 `public function afterIndex(Collection $data): mixed`: Modify fetched index data before send back to the user.
+
+## View Route
+There are several useful methods related to view route which you can override inside the autocrud class.
+
+`public function viewMiddlewares(): array`: You can add view route specific middlewares here.
+
+`public function afterViewPage(): string`: View to redirect after view operation in web apps, (Not available in APIs.)
+
+`public function makeViewRoute(): bool`: If this is set to false, view route will not be available for that particular model.
+
+`public function viewMethod(): string`: Method for that specific view route. Default is “GET”.
+
+`public function viewEagerLoad(): array`: If you need to eager load any relationship data with view, add those relationships here.
+
+`public function beforeView(Builder $query): Builder`: If you need to modify inde query, you may do it here. (Don’t include ->get())
+
+`public function afterView(Model $model): mixed`: Modify fetched view data before send back to the user.
+
+## Create Route
+There are several useful methods related to create route which you can override inside the autocrud class.
+
+`public function createMiddlewares(): array`: You can add create route specific middlewares here.
+
+`public function afterCreatePage(): string`: View to redirect after create operation in web apps, (Not available in APIs.)
+
+`public function makeCreateRoute(): bool`: If this is set to false, create route will not be available for that particular model.
+
+`public function createMethod(): string`: Method for that specific create route. Default is “POST”.
+
+`public function createRequest(): string|null`: Here you can set the name of form request class. Normally, autocrud will get the form request class automatically when you are following the convention in [forlder structure](#folder-structure) section. Oherwise you can specifically give that class here.
+
+You can skip form request validation by returning null.
+```php
+/**
+ * Request class name for create requests
+ */
+public function createRequest(): string|null
+{
+    return "\App\UserModule\Requests\UserRequest.php";
+}
+```
+
+`public function beforeCreate(array $data): array`: You can change data before save in the DB here.
+
+```php
+/**
+ * Do things before add data to the DB.
+ */
+public function beforeCreate(array $data): array
+{
+    if (array_key_exists('password', $data)) {
+        $data['password'] = Hash::make($data['password']);
+    }
+    
+    if (array_key_exists('profile_picture', $data)) {
+        //Perform file saving here & get $fileName.
+        $data['profile_picture'] = $fileName;
+    }
+
+    return $data;
+}
+```
+
+`public function afterCreate(Model $model): mixed`: Modify created data before send back to the user.
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
