@@ -2,9 +2,11 @@
 
 namespace WKasunSampath\LaravelAutocrud\Traits;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,12 +73,12 @@ trait CrudCreateTrait
     /**
      * Do things before send response.
      */
-    public function afterCreate(Model $model): mixed
+    public function afterCreate(Model $model): JsonResponse | JsonResource | View
     {
         if ($this->isApi && ! empty($this->resource())) {
             return new ($this->resource())($model);
         } elseif ($this->isApi) {
-            return response()->json($model, JsonResponse::HTTP_OK);
+            return response()->json($model, JsonResponse::HTTP_CREATED);
         } else {
             return view($this->afterCreatePage(), ['data' => $model])
                 ->with('success', 'Record was created successfully');

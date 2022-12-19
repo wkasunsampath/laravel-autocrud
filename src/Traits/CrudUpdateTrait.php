@@ -2,9 +2,11 @@
 
 namespace WKasunSampath\LaravelAutocrud\Traits;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -71,7 +73,7 @@ trait CrudUpdateTrait
     /**
      * Do things before send response.
      */
-    public function afterUpdate(Model $model): mixed
+    public function afterUpdate(Model $model): JsonResponse | JsonResource | View
     {
         if ($this->isApi && ! empty($this->resource())) {
             return new ($this->resource())($model);

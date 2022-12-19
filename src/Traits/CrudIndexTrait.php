@@ -2,9 +2,11 @@
 
 namespace WKasunSampath\LaravelAutocrud\Traits;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -66,7 +68,7 @@ trait CrudIndexTrait
     /**
      * Do things before send response.
      */
-    public function afterIndex(Collection $data): mixed
+    public function afterIndex(Collection $data): JsonResponse | ResourceCollection | View
     {
         if ($this->isApi && ! empty($this->resource(true))) {
             return new ($this->resource(true))($data);

@@ -17,8 +17,8 @@ class LaravelAutocrudRouteServiceProvider extends ServiceProvider
             if (
                 class_exists(config('autocrud.autocrud_file.namespace').'\\'.config('autocrud.autocrud_file.name'))
             ) {
-                (new (config('autocrud.autocrud_file.namespace').'\\'.config('autocrud.autocrud_file.name'))())
-                    ->registerRoutes();
+                $autocrudClass = config('autocrud.autocrud_file.namespace').'\\'.config('autocrud.autocrud_file.name');
+                (new $autocrudClass())->registerRoutes();
             }
         });
     }

@@ -2,6 +2,7 @@
 
 namespace WKasunSampath\LaravelAutocrud\Traits;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Route;
@@ -57,7 +58,7 @@ trait CrudDeleteTrait
     /**
      * Do things before send response.
      */
-    public function afterDelete(): mixed
+    public function afterDelete(): JsonResponse | View
     {
         if ($this->isApi) {
             return response()->json(null, JsonResponse::HTTP_OK);
