@@ -1,5 +1,7 @@
 # Laravel Autocrud - Automate CRUD operations in Laravel applications.
 
+[![Latest Stable Version](http://poser.pugx.org/wkasunsampath/laravel-autocrud/v)](https://packagist.org/packages/wkasunsampath/laravel-autocrud) [![License](http://poser.pugx.org/wkasunsampath/laravel-autocrud/license)](https://packagist.org/packages/wkasunsampath/laravel-autocrud) [![PHP Version Require](http://poser.pugx.org/wkasunsampath/laravel-autocrud/require/php)](https://packagist.org/packages/wkasunsampath/laravel-autocrud)
+
 When Laravel apps are developed, developers have to write CRUD operations for several models. Some of them are just regular CRUD operations without any special logic. This package is to automate these CRUD operations. Therefore, developers can save most of their development time.
 
 To create a fully working CRUD for User model, just run below command,
@@ -20,7 +22,7 @@ Seems interesting? :D Ok!, let's continue.
 
 ## Installation
 
-You can install the package via composer:
+You can install the package via composer: (Currently supports only for Laravel 8 & 9)
 
 ```bash
 composer require wkasunsampath/laravel-autocrud
