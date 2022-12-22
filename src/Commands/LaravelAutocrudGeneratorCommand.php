@@ -94,7 +94,7 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
         }
 
         if ($this->hasOption('p') && $this->option('p')) {
-            $this->call('make:policy', ['name' => $name . 'Policy', '--model' => $this->argument('name')]);
+            $this->call('make:policy', ['name' => $this->argument('name') . 'Policy', '--model' => $this->argument('name')]);
         }
 
         if ($this->hasOption('req') && $this->option('req')) {
