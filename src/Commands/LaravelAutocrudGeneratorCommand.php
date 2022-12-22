@@ -7,11 +7,11 @@ use Illuminate\Console\GeneratorCommand;
 class LaravelAutocrudGeneratorCommand extends GeneratorCommand
 {
     /**
-     * The console command name.
+     * The console command signature.
      *
      * @var string
      */
-    protected $name = 'autocrud:create {name}';
+    protected $signature = 'autocrud:create {name} {--m} {--mg} {--c} {--p} {--req} {--r} {--s} {--o}';
 
     /**
      * The console command description.
@@ -35,8 +35,8 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
     protected function getStub()
     {
         return config('autocrud.app_type') === 'api'
-            ? __DIR__.'/stubs/autocrudApi.php.stub'
-            : __DIR__.'/stubs/autocrudWeb.php.stub';
+        ? __DIR__ . '/stubs/autocrudApi.php.stub'
+        : __DIR__ . '/stubs/autocrudWeb.php.stub';
     }
 
     /**
@@ -60,7 +60,7 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
      */
     protected function replaceClass($stub, $name)
     {
-        $class = str_replace($this->getNamespace($name).'\\', '', $name);
+        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
 
         return str_replace('{{crud_class}}', $class, $stub);
     }
@@ -77,6 +77,42 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
         $this->doOtherOperations();
 
         $this->editAutocrudFile();
+
+        $name = explode('/', $this->argument('name'));
+        $name = array_pop($name);
+
+        if ($this->hasOption('m') && $this->option('m')) {
+            $this->call('make:model', ['name' => $this->argument('name')]);
+        }
+
+        if ($this->hasOption('mg') && $this->option('mg')) {
+            $this->call('make:migration', ['name' => "create_" . strtolower($name) . "_table"]);
+        }
+
+        if ($this->hasOption('c') && $this->option('c')) {
+            $this->call('make:controller', ['name' => $this->argument('name') . 'Controller']);
+        }
+
+        if ($this->hasOption('p') && $this->option('p')) {
+            $this->call('make:policy', ['name' => $name . 'Policy', '--model' => $this->argument('name')]);
+        }
+
+        if ($this->hasOption('req') && $this->option('req')) {
+            $this->call('make:request', ['name' => $this->argument('name') . 'Request']);
+        }
+
+        if ($this->hasOption('r') && $this->option('r')) {
+            $this->call('make:resource', ['name' => $this->argument('name') . 'Resource']);
+            $this->call('make:resource', ['name' => $this->argument('name') . 'Collection']);
+        }
+
+        if ($this->hasOption('s') && $this->option('s')) {
+            $this->call('make:seeder', ['name' => $name . 'Seeder']);
+        }
+
+        if ($this->hasOption('o') && $this->option('o')) {
+            $this->call('make:observer', ['name' => $name . 'Observer', '--model' => $this->argument('name')]);
+        }
     }
 
     protected function doOtherOperations(): void
@@ -86,11 +122,11 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
 
         $content = file_get_contents($path);
 
-        $content .= '    protected string $model = \\'.
-            config('autocrud.model_namespace').
-            '\\'.
-            implode('\\', explode('/', $this->argument('name'))).
-            "::class;\n".
+        $content .= '    protected string $model = \\' .
+        config('autocrud.model_namespace') .
+        '\\' .
+        implode('\\', explode('/', $this->argument('name'))) .
+            "::class;\n" .
             "\n    /**
      * Middlewares which are applied to all routes
      *
@@ -168,13 +204,13 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
     {
         return \$this->routeName() . '.delete';
     }
-        ".
+        " .
             "\n}";
     }
 
     protected function editAutocrudFile()
     {
-        $path = config('autocrud.autocrud_file.namespace').'\\'.config('autocrud.autocrud_file.name').'.php';
+        $path = config('autocrud.autocrud_file.namespace') . '\\' . config('autocrud.autocrud_file.name') . '.php';
         $content = file_get_contents($path);
 
         $seperatedContent = explode('[', $content);
@@ -183,9 +219,9 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
 
         $arrayContent = $secondParts[0];
         if (empty($secondParts[0])) {
-            $arrayContent .= "\n        \\".config('autocrud.autocrud_file.namespace').'\\'.implode('\\', explode('/', $this->argument('name'))).'::class,';
+            $arrayContent .= "\n        \\" . config('autocrud.autocrud_file.namespace') . '\\' . implode('\\', explode('/', $this->argument('name'))) . '::class,';
         } else {
-            $arrayContent .= '    \\'.config('autocrud.autocrud_file.namespace').'\\'.implode('\\', explode('/', $this->argument('name'))).'::class,';
+            $arrayContent .= '    \\' . config('autocrud.autocrud_file.namespace') . '\\' . implode('\\', explode('/', $this->argument('name'))) . '::class,';
         }
 
         $arrayContent .= "\n    ";

@@ -177,6 +177,23 @@ It is recommended to follow below convention when using autocrud library.
 ```
 As you may have noticed, creating five different files for CRUD in views folder is little bit abnormal and most of the time it is not neccessary. (This will applicable only in web apps.) When you are creating autocrud classes for a web app, there will be functions to override this behaviour.
 
+There is an easy way to create Model, Controller, Policy, Request, Resources, Migrations & Observers with the Autocrud class by passing some options to the artisan command.
+
+```bash
+php artisan autocrud:create Company/Office --m --mg --c --p --req --r --o --s
+```
+
+1. --m: Model
+2. --mg: Migration
+3. --c: Controller
+4. --p: Policy
+5. --req: Form Request
+6. --r: Resource
+7. --o: Observer
+8. --s: Seeder
+
+This command will create files according to the above folder structure.
+
 ## Index Route
 There are several useful methods related to index route which you can override inside the autocrud class.
 
