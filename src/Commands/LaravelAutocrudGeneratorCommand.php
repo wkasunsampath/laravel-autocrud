@@ -3,6 +3,7 @@
 namespace WKasunSampath\LaravelAutocrud\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 
 class LaravelAutocrudGeneratorCommand extends GeneratorCommand
 {
@@ -82,11 +83,13 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
         $name = array_pop($name);
 
         if ($this->hasOption('m') && $this->option('m')) {
-            $this->call('make:model', ['name' => $this->argument('name')]);
-        }
-
-        if ($this->hasOption('mg') && $this->option('mg')) {
-            $this->call('make:migration', ['name' => "create_" . strtolower($name) . "_table"]);
+            if ($this->hasOption('mg') && $this->option('mg')) {
+                $this->call('make:model', ['name' => $this->argument('name'), '--migration' => true]);
+            } else {
+                $this->call('make:model', ['name' => $this->argument('name')]);
+            }
+        } elseif ($this->hasOption('mg') && $this->option('mg')) {
+            $this->call('make:migration', ['name' => "create_" . Str::plural(strtolower($name)) . "_table"]);
         }
 
         if ($this->hasOption('c') && $this->option('c')) {
