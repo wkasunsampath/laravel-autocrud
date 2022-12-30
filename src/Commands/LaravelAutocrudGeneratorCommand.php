@@ -101,7 +101,8 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
         }
 
         if ($this->hasOption('req') && $this->option('req')) {
-            $this->call('make:request', ['name' => $this->argument('name') . 'Request']);
+            $this->call('make:request', ['name' => $this->argument('name') . 'CreateRequest']);
+            $this->call('make:request', ['name' => $this->argument('name') . 'UpdateRequest']);
         }
 
         if ($this->hasOption('r') && $this->option('r')) {

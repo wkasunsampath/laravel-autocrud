@@ -30,7 +30,7 @@ trait CrudUpdateTrait
      */
     public function afterUpdatePage(): string
     {
-        return $this->routeName().'.update';
+        return $this->routeName() . '.update';
     }
 
     /**
@@ -75,7 +75,7 @@ trait CrudUpdateTrait
      */
     public function afterUpdate(Model $model): JsonResponse | JsonResource | View
     {
-        if ($this->isApi && ! empty($this->resource())) {
+        if ($this->isApi && !empty($this->resource())) {
             return new ($this->resource())($model);
         } elseif ($this->isApi) {
             return response()->json($model, JsonResponse::HTTP_OK);
@@ -86,23 +86,32 @@ trait CrudUpdateTrait
     }
 
     /**
+     * Update saved data in DB
+     */
+    public function updateStore(Model $resource, array $requestData): Model
+    {
+        $resource->update($requestData);
+        return $resource;
+    }
+
+    /**
      * Update method
      */
     public function update(): Route|array
     {
-        if (! $this->makeUpdateRoute()) {
+        if (!$this->makeUpdateRoute()) {
             return [];
         }
 
         return $this->getRoute()
-            ->{$this->updateMethod()}($this->routeName().'/{id}', function ($id) {
+            ->{$this->updateMethod()}($this->routeName() . '/{id}', function ($id) {
                 $resource = $this->modelInstance->findOrFail($id);
 
                 if (Auth::check() && Auth::user()->cannot('update', $resource)) {
                     return response()->json(null, JsonResponse::HTTP_NOT_FOUND);
                 }
 
-                if (! empty($this->updateRequest())) {
+                if (!empty($this->updateRequest())) {
                     try {
                         $request = app($this->updateRequest());
                     } catch (\Illuminate\Validation\ValidationException $ex) {
@@ -118,11 +127,11 @@ trait CrudUpdateTrait
                 }
 
                 $requestData = $this->beforeUpdate($requestData);
-                $resource->update($requestData);
+                $resource = $this->updateStore($resource, $requestData);
 
                 return $this->afterUpdate($resource);
             })
             ->middleware(array_merge($this->commonMiddlewares(), $this->updateMiddlewares()))
-            ->name($this->routeName().'_update');
+            ->name($this->routeName() . '_update');
     }
 }

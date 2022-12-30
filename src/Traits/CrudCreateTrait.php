@@ -30,7 +30,7 @@ trait CrudCreateTrait
      */
     public function afterCreatePage(): string
     {
-        return $this->routeName().'.create';
+        return $this->routeName() . '.create';
     }
 
     /**
@@ -75,7 +75,7 @@ trait CrudCreateTrait
      */
     public function afterCreate(Model $model): JsonResponse | JsonResource | View
     {
-        if ($this->isApi && ! empty($this->resource())) {
+        if ($this->isApi && !empty($this->resource())) {
             return new ($this->resource())($model);
         } elseif ($this->isApi) {
             return response()->json($model, JsonResponse::HTTP_CREATED);
@@ -86,11 +86,19 @@ trait CrudCreateTrait
     }
 
     /**
+     * Save data to DB
+     */
+    public function store(array $requestData): Model
+    {
+        return $this->modelInstance->create($requestData);
+    }
+
+    /**
      * Create method
      */
     public function create(): Route|array
     {
-        if (! $this->makeCreateRoute()) {
+        if (!$this->makeCreateRoute()) {
             return [];
         }
 
@@ -100,7 +108,7 @@ trait CrudCreateTrait
                     return response()->json(null, JsonResponse::HTTP_NOT_FOUND);
                 }
 
-                if (! empty($this->createRequest())) {
+                if (!empty($this->createRequest())) {
                     try {
                         $request = app($this->createRequest());
                     } catch (\Illuminate\Validation\ValidationException $ex) {
@@ -117,9 +125,9 @@ trait CrudCreateTrait
 
                 $requestData = $this->beforeCreate($requestData);
 
-                return $this->afterCreate($this->modelInstance->create($requestData));
+                return $this->afterCreate($this->store($requestData));
             })
             ->middleware(array_merge($this->commonMiddlewares(), $this->createMiddlewares()))
-            ->name($this->routeName().'_create');
+            ->name($this->routeName() . '_create');
     }
 }
