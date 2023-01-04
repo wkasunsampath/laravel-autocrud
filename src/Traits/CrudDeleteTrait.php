@@ -27,7 +27,7 @@ trait CrudDeleteTrait
      */
     public function afterDeletePage(): string
     {
-        return $this->routeName().'.delete';
+        return $this->routeName() . '.delete';
     }
 
     /**
@@ -68,16 +68,24 @@ trait CrudDeleteTrait
     }
 
     /**
+     * Remove data from DB
+     */
+    public function remove(Model $resource): void
+    {
+        $resource->delete();
+    }
+
+    /**
      * Delete method
      */
     public function delete(): Route|array
     {
-        if (! $this->makeDeleteRoute()) {
+        if (!$this->makeDeleteRoute()) {
             return [];
         }
 
         return $this->getRoute()
-            ->{$this->deleteMethod()}($this->routeName().'/{id}', function ($id) {
+            ->{$this->deleteMethod()}($this->routeName() . '/{id}', function ($id) {
                 $resource = $this->modelInstance->findOrFail($id);
 
                 if (Auth::check() && Auth::user()->cannot('delete', $resource)) {
@@ -85,11 +93,10 @@ trait CrudDeleteTrait
                 }
 
                 $this->beforeDelete($resource);
-                $resource->delete();
-
+                $this->remove($resource);
                 return $this->afterDelete();
             })
             ->middleware(array_merge($this->commonMiddlewares(), $this->deleteMiddlewares()))
-            ->name($this->routeName().'_delete');
+            ->name($this->routeName() . '_delete');
     }
 }
