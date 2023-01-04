@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use WKasunSampath\LaravelAutocrud\BaseCrud;
+use {{ base_crud_path }};
 
-class {{crud_class}} extends BaseCrud
+class {{crud_class}} extends {{ base_crud }}
 {
     /**
      * Set whether CRUD operations are related to API or not.

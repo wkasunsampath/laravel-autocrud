@@ -36,8 +36,8 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
     protected function getStub()
     {
         return config('autocrud.app_type') === 'api'
-        ? __DIR__ . '/stubs/autocrudApi.php.stub'
-        : __DIR__ . '/stubs/autocrudWeb.php.stub';
+            ? __DIR__ . '/stubs/autocrudApi.php.stub'
+            : __DIR__ . '/stubs/autocrudWeb.php.stub';
     }
 
     /**
@@ -64,6 +64,28 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
         $class = str_replace($this->getNamespace($name) . '\\', '', $name);
 
         return str_replace('{{crud_class}}', $class, $stub);
+    }
+
+    /**
+     * Build the class with the given name.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function buildClass($name)
+    {
+        $stub = parent::buildClass($name);
+
+        $replace = [
+            '{{ base_crud_path }}' => config('autocrud.basecrud_path'),
+            '{{ base_crud }}' => class_basename("\\" . config('autocrud.basecrud_path')),
+        ];
+
+        return str_replace(
+            array_keys($replace),
+            array_values($replace),
+            $stub
+        );
     }
 
     /**
@@ -127,9 +149,9 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
         $content = file_get_contents($path);
 
         $content .= '    protected string $model = \\' .
-        config('autocrud.model_namespace') .
-        '\\' .
-        implode('\\', explode('/', $this->argument('name'))) .
+            config('autocrud.model_namespace') .
+            '\\' .
+            implode('\\', explode('/', $this->argument('name'))) .
             "::class;\n" .
             "\n    /**
      * Middlewares which are applied to all routes

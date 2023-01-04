@@ -85,4 +85,16 @@ return [
     |
     */
     'request_namespace' => 'App\Http\Requests',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Override the Autocrud BaseCrud class
+    |--------------------------------------------------------------------------
+    |
+    | There can be instances that you need to override the BaseCrud class and add
+    | overridden class to all autocrud classes when generate. Here you can register
+    | the pathe of custom BaseCrud class you created. (Without leading \)
+    |
+    */
+    'basecrud_path' => 'WKasunSampath\LaravelAutocrud\BaseCrud',
 ];
