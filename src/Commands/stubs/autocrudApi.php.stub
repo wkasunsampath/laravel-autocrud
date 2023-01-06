@@ -12,5 +12,11 @@ class {{crud_class}} extends {{ base_crud }}
     protected bool $isApi = true;
 
     /**
+     * If $paginate is false, index results will not be paginated.
+     * Otherwise, specify the paginate count to enable pagination.
+     */
+    protected bool|int $paginate = false;
+
+    /**
      * Model instance which CRUD operations relate.
      */
