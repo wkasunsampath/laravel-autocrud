@@ -33,6 +33,12 @@ class BaseCrud
     protected bool $isApi = true;
 
     /**
+     * If $paginate is false, index results will not be paginated.
+     * Otherwise, specify the paginate count to enable pagination.
+     */
+    protected bool|int $paginate = false;
+
+    /**
      * Model instance
      */
     protected Model $modelInstance;
@@ -90,14 +96,14 @@ class BaseCrud
     public function resource(bool $isCollection = false): string|null
     {
         $suffix = $isCollection ? 'Collection' : 'Resource';
-        $resource = $this->getClassName().$suffix;
+        $resource = $this->getClassName() . $suffix;
 
-        if (class_exists(config('autocrud.resource_namespace').'\\'.$resource)) {
-            return config('autocrud.resource_namespace').'\\'.$resource;
+        if (class_exists(config('autocrud.resource_namespace') . '\\' . $resource)) {
+            return config('autocrud.resource_namespace') . '\\' . $resource;
         } elseif (
-            class_exists(config('autocrud.resource_namespace').'\\'.$this->getRelativeFolder().$suffix)
+            class_exists(config('autocrud.resource_namespace') . '\\' . $this->getRelativeFolder() . $suffix)
         ) {
-            return config('autocrud.resource_namespace').'\\'.$this->getRelativeFolder().$suffix;
+            return config('autocrud.resource_namespace') . '\\' . $this->getRelativeFolder() . $suffix;
         }
 
         return null;
@@ -109,14 +115,14 @@ class BaseCrud
     public function request(bool $isCreate = true): string|null
     {
         $type = $isCreate ? 'Create' : 'Update';
-        $request = $this->getClassName().$type.'Request';
+        $request = $this->getClassName() . $type . 'Request';
 
-        if (class_exists(config('autocrud.request_namespace').'\\'.$request)) {
-            return config('autocrud.request_namespace').'\\'.$request;
+        if (class_exists(config('autocrud.request_namespace') . '\\' . $request)) {
+            return config('autocrud.request_namespace') . '\\' . $request;
         } elseif (
-            class_exists(config('autocrud.request_namespace').'\\'.$this->getRelativeFolder().$type.'Request')
+            class_exists(config('autocrud.request_namespace') . '\\' . $this->getRelativeFolder() . $type . 'Request')
         ) {
-            return config('autocrud.request_namespace').'\\'.$this->getRelativeFolder().$type.'Request';
+            return config('autocrud.request_namespace') . '\\' . $this->getRelativeFolder() . $type . 'Request';
         }
 
         return null;

@@ -29,7 +29,7 @@ trait CrudIndexTrait
      */
     public function afterIndexPage(): string
     {
-        return $this->routeName().'.index';
+        return $this->routeName() . '.index';
     }
 
     /**
@@ -70,7 +70,7 @@ trait CrudIndexTrait
      */
     public function afterIndex(Collection $data): JsonResponse | ResourceCollection | View
     {
-        if ($this->isApi && ! empty($this->resource(true))) {
+        if ($this->isApi && !empty($this->resource(true))) {
             return new ($this->resource(true))($data);
         } elseif ($this->isApi) {
             return response()->json($data, JsonResponse::HTTP_OK);
@@ -84,7 +84,7 @@ trait CrudIndexTrait
      */
     public function index(): Route|array
     {
-        if (! $this->makeIndexRoute()) {
+        if (!$this->makeIndexRoute()) {
             return [];
         }
 
@@ -94,11 +94,16 @@ trait CrudIndexTrait
                     return response()->json(null, JsonResponse::HTTP_NOT_FOUND);
                 }
 
-                return $this->afterIndex(
-                    $this->beforeIndex($this->modelInstance->with($this->indexEagerLoad()))->get()
-                );
+                if ($this->paginate && is_int($this->paginate)) {
+                    $data = $this->beforeIndex($this->modelInstance->with($this->indexEagerLoad()))
+                        ->paginate($this->paginate);
+                } else {
+                    $data = $this->beforeIndex($this->modelInstance->with($this->indexEagerLoad()))->get();
+                }
+
+                return $this->afterIndex($data);
             })
             ->middleware(array_merge($this->commonMiddlewares(), $this->indexMiddlewares()))
-            ->name($this->routeName().'_index');
+            ->name($this->routeName() . '_index');
     }
 }
