@@ -4,6 +4,7 @@ namespace WKasunSampath\LaravelAutocrud\Traits;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -56,6 +57,14 @@ trait CrudUpdateTrait
     public function updateRequest(): string|null
     {
         return $this->request(false);
+    }
+
+    /**
+     * Get validated content (Only if form request class is available)
+     */
+    public function getValidatedContent(FormRequest $request): array
+    {
+        return $request->validated();
     }
 
     /**
@@ -120,7 +129,7 @@ trait CrudUpdateTrait
                             : back()->with('error', $ex->getMessage())->withInput();
                     }
 
-                    $requestData = $request->validated();
+                    $requestData = $this->getValidatedContent($request);
                 } else {
                     $request = app(Request::class);
                     $requestData = $request->all();
