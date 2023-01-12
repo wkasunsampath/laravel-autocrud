@@ -62,7 +62,7 @@ trait CrudUpdateTrait
     /**
      * Get validated content (Only if form request class is available)
      */
-    public function getValidatedContent(FormRequest $request): array
+    public function getValidatedContentForUpdate(FormRequest $request): array
     {
         return $request->validated();
     }
@@ -129,7 +129,7 @@ trait CrudUpdateTrait
                             : back()->with('error', $ex->getMessage())->withInput();
                     }
 
-                    $requestData = $this->getValidatedContent($request);
+                    $requestData = $this->getValidatedContentForUpdate($request);
                 } else {
                     $request = app(Request::class);
                     $requestData = $request->all();

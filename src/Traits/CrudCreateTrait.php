@@ -62,7 +62,7 @@ trait CrudCreateTrait
     /**
      * Get validated content (Only if form request class is available)
      */
-    public function getValidatedContent(FormRequest $request): array
+    public function getValidatedContentForCreate(FormRequest $request): array
     {
         return $request->validated();
     }
@@ -126,7 +126,7 @@ trait CrudCreateTrait
                             : back()->with('error', $ex->getMessage())->withInput();
                     }
 
-                    $requestData = $this->getValidatedContent($request);
+                    $requestData = $this->getValidatedContentForCreate($request);
                 } else {
                     $request = app(Request::class);
                     $requestData = $request->all();
