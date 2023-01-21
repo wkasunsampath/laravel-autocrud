@@ -236,22 +236,25 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
 
     protected function editAutocrudFile()
     {
-        $path = config('autocrud.autocrud_file.namespace') . '\\' . config('autocrud.autocrud_file.name') . '.php';
-        $content = file_get_contents($path);
+        $path = config('autocrud.autocrud_file.path') . '\\' . config('autocrud.autocrud_file.name') . '.php';
 
-        $seperatedContent = explode('[', $content);
-        $firstPart = $seperatedContent[0];
-        $secondParts = explode(']', $seperatedContent[1]);
+        if (file_exists(getcwd() . '/' . str_replace('\\', '/', $path))) {
+            $content = file_get_contents(getcwd() . '/' . str_replace('\\', '/', $path), true);
 
-        $arrayContent = $secondParts[0];
-        if (empty($secondParts[0])) {
-            $arrayContent .= "\n        \\" . config('autocrud.autocrud_file.namespace') . '\\' . implode('\\', explode('/', $this->argument('name'))) . '::class,';
-        } else {
-            $arrayContent .= '    \\' . config('autocrud.autocrud_file.namespace') . '\\' . implode('\\', explode('/', $this->argument('name'))) . '::class,';
+            $seperatedContent = explode('[', $content);
+            $firstPart = $seperatedContent[0];
+            $secondParts = explode(']', $seperatedContent[1]);
+
+            $arrayContent = $secondParts[0];
+            if (empty($secondParts[0])) {
+                $arrayContent .= "\n        \\" . config('autocrud.autocrud_file.namespace') . '\\' . implode('\\', explode('/', $this->argument('name'))) . '::class,';
+            } else {
+                $arrayContent .= '    \\' . config('autocrud.autocrud_file.namespace') . '\\' . implode('\\', explode('/', $this->argument('name'))) . '::class,';
+            }
+
+            $arrayContent .= "\n    ";
+
+            file_put_contents($path, implode('[', [$firstPart, implode(']', [$arrayContent, $secondParts[1]])]));
         }
-
-        $arrayContent .= "\n    ";
-
-        file_put_contents($path, implode('[', [$firstPart, implode(']', [$arrayContent, $secondParts[1]])]));
     }
 }

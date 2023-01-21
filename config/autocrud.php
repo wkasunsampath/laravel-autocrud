@@ -27,6 +27,7 @@ return [
     'autocrud_file' => [
         'name' => 'Autocruds',
         'namespace' => 'App\Http\Autocruds',
+        'path' => 'app\Http\Autocruds'
     ],
 
     /*
