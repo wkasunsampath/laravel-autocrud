@@ -254,7 +254,7 @@ class LaravelAutocrudGeneratorCommand extends GeneratorCommand
 
             $arrayContent .= "\n    ";
 
-            file_put_contents($path, implode('[', [$firstPart, implode(']', [$arrayContent, $secondParts[1]])]));
+            file_put_contents(getcwd() . '/' . str_replace('\\', '/', $path), implode('[', [$firstPart, implode(']', [$arrayContent, $secondParts[1]])]));
         }
     }
 }
