@@ -22,7 +22,7 @@ Seems interesting? :D Ok!, let's continue.
 
 ## Installation
 
-You can install the package via composer: (Currently supports only for Laravel 8 & 9)
+You can install the package via composer: (Currently supports only for Laravel 8, 9 & 10)
 
 ```bash
 composer require wkasunsampath/laravel-autocrud
